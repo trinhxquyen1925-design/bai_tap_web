@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập 2 - Gọi API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 480px; /* Mở rộng khung ra một chút để chứa dòng chữ dài */
+        }
+        h2 { color: #1a73e8; margin-top: 0; }
+        
+        /* Chỉnh lại CSS cho dòng chữ nhỏ mới */
+        h3 { color: #5f6368; font-weight: normal; margin-bottom: 25px; font-size: 16px; line-height: 1.5; }
+        
+        button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(26, 115, 232, 0.3);
+        }
+        button:hover { background-color: #1557b0; }
+        #ketqua { margin-top: 30px; text-align: left; }
+        ul { list-style-type: none; padding: 0; margin: 0; }
+        li {
+            background: #f8f9fa;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #34a853;
+            font-size: 15px;
+            color: #333;
+            line-height: 1.6; /* Tăng khoảng cách dòng cho dễ nhìn */
+        }
+        .success-msg {
+            color: #34a853;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Chào mừng đến với Website 1</h2>
+        
+        <!-- Đã sửa lại dòng chữ này giống của bạn bè bạn -->
+        <h3>Website gọi API Node-RED thông qua Nginx và Cloudflare Tunnel.</h3>
+        
+        <button onclick="goiAPI()">Bấm để gọi API</button>
+        
+        <div id="ketqua"></div>
+    </div>
+
+    <script>
+        function goiAPI() {
+            document.getElementById('ketqua').innerHTML = "<p style='text-align: center; color: #666;'>Đang tải dữ liệu...</p>";
+
+            fetch('/api/sinhvien')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok === 1) {
+                        let html = `<div class="success-msg">TRẠNG THÁI: THÀNH CÔNG ✔️</div><ul>`;
+                        
+                        // Thêm biến index để đếm tự động (0, 1, 2...)
+                        data.dssv.forEach((sv, index) => {
+                            let stt = index + 1; // Cộng 1 để in ra bắt đầu từ số 1
+                            
+                            // Đã thêm thẻ <b>${stt}.</b> để in số thứ tự in đậm
+                            html += `<li><b>${stt}.</b> 👤 Tên: <b>${sv.name}</b> <br> 💰 Tài sản: $${sv.money}</li>`;
+                        });
+                        
+                        html += `</ul>`;
+                        document.getElementById('ketqua').innerHTML = html;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('ketqua').innerHTML = "<p style='color: red; text-align: center;'>❌ Lỗi gọi API: " + error + "</p>";
+                });
+        }
+    </script>
+
+</body>
+</html>

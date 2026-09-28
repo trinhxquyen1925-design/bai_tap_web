@@ -1,4 +1,5 @@
 {
     "instanceId": "e9136801ff00a71b",
-    "_credentialSecret": "eafd43f1ccf5c396edb5a7a218b7c670692f29bcc822055af0ef5176956b55b9"
+    "_credentialSecret": "eafd43f1ccf5c396edb5a7a218b7c670692f29bcc822055af0ef5176956b55b9",
+    "telemetryEnabled": false
 }

@@ -1,0 +1,103 @@
+[
+    {
+        "id": "6aa1dd8bae1893b9",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "138f7e7aec722060",
+        "type": "MySQLdatabase",
+        "name": "mariadb",
+        "host": "mariadb",
+        "port": "3306",
+        "db": "web_database",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "766c36a274f46deb",
+        "type": "http in",
+        "z": "6aa1dd8bae1893b9",
+        "name": "Get Students",
+        "url": "/api/sinhvien",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 180,
+        "wires": [
+            [
+                "70c80e823d4a7a41"
+            ]
+        ]
+    },
+    {
+        "id": "70c80e823d4a7a41",
+        "type": "function",
+        "z": "6aa1dd8bae1893b9",
+        "name": "Query Students",
+        "func": "msg.topic = \"SELECT name, money FROM sinhvien;\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 220,
+        "wires": [
+            [
+                "48f9965eb08266ee"
+            ]
+        ]
+    },
+    {
+        "id": "7c6cfacc068b1fca",
+        "type": "http response",
+        "z": "6aa1dd8bae1893b9",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 910,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "48f9965eb08266ee",
+        "type": "mysql",
+        "z": "6aa1dd8bae1893b9",
+        "mydb": "138f7e7aec722060",
+        "name": "MariaDB",
+        "x": 500,
+        "y": 260,
+        "wires": [
+            [
+                "133ab76b0b1160f8"
+            ]
+        ]
+    },
+    {
+        "id": "133ab76b0b1160f8",
+        "type": "function",
+        "z": "6aa1dd8bae1893b9",
+        "name": "Create Student Response",
+        "func": "let danh_sach = msg.payload; \nmsg.payload = {\n    \"ok\": 1,\n    \"msg\": \"Thành công (Dữ liệu lấy trực tiếp từ Database)\",\n    \"dssv\": danh_sach\n};\nreturn msg;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 300,
+        "wires": [
+            [
+                "7c6cfacc068b1fca"
+            ]
+        ]
+    }
+]
