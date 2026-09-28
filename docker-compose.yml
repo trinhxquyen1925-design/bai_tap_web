@@ -1,0 +1,63 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: web_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./html:/usr/share/nginx/html
+    networks:
+      - my_network
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: web_nodered
+    restart: always
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./nodered_data:/data
+    networks:
+      - my_network
+
+  mariadb:
+    image: mariadb:lts
+    container_name: web_mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: matkhau_cua_ban
+      MYSQL_DATABASE: web_database
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - my_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: web_phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mariadb
+    networks:
+      - my_network
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: web_cloudflared
+    restart: always
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=NHAP_TOKEN_CLOUDFLARE_CUA_BAN_VAO_DAY
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  db_data:
